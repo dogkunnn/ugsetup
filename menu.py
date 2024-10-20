@@ -71,7 +71,8 @@ def main():
         choice = input("เลือกตัวเลือก (1/2/3/4/5): ")
 
         if choice == '1':
-            os.system("python3 rejoin.py")  # รัน Python สคริปต์
+            os.system('su -c "cd /sdcard/download && export PATH=$PATH:/data/data/com.termux/files/usr/bin && export TERM=xterm-256color && python ./rejoin.py"')
+          # รัน Python สคริปต์
         elif choice == '2':
             os.system("ls -l")  # แสดงไฟล์ในโฟลเดอร์ปัจจุบัน
         elif choice == '3':
