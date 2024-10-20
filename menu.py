@@ -7,6 +7,7 @@ def display_menu():
     print("3) ออกจากโปรแกรม")
     print("4) แก้ไขไฟล์ moon.txt และสคริปต์นี้")
     print("5) ลบ JobId และเปลี่ยนกลับเป็น newjobid")
+    print("6) ปิดแอพ Roblox")
 
 def edit_file(file_path, new_job_id):
     # แก้ไขไฟล์ moon.txt
@@ -62,17 +63,21 @@ def reset_job_id(file_path):
     else:
         print(f"ไม่พบไฟล์ {file_path}")
 
+def close_roblox():
+    # ปิดแอพ Roblox
+    os.system("am force-stop com.roblox.client")  # ใช้ชื่อ package ของ Roblox
+
 def main():
     file_path = '/storage/emulated/0/Delta/AUTOexecute/moon.txt'
     script_path = os.path.realpath(__file__)  # รับเส้นทางของสคริปต์ปัจจุบัน
 
     while True:
         display_menu()
-        choice = input("เลือกตัวเลือก (1/2/3/4/5): ")
+        choice = input("เลือกตัวเลือก (1/2/3/4/5/6): ")
 
         if choice == '1':
-            os.system('su -c "cd /sdcard/download && export PATH=$PATH:/data/data/com.termux/files/usr/bin && export TERM=xterm-256color && python ./rejoin.py"')
-          # รัน Python สคริปต์
+            os.system(os.system('su -c "cd /sdcard/download && export PATH=\$PATH:/data/data/com.termux/files/usr/bin && export TERM=xterm-256color && python ./rejoin.py"')
+)  # รัน Python สคริปต์
         elif choice == '2':
             os.system("ls -l")  # แสดงไฟล์ในโฟลเดอร์ปัจจุบัน
         elif choice == '3':
@@ -85,9 +90,10 @@ def main():
         elif choice == '5':
             reset_job_id(file_path)
             reset_job_id(script_path)  # รีเซ็ตในสคริปต์นี้ด้วย
+        elif choice == '6':
+            close_roblox()  # ปิดแอพ Roblox
         else:
             print("ตัวเลือกไม่ถูกต้อง โปรดลองอีกครั้ง.")  # เพิ่มการจัดการในกรณีตัวเลือกผิด
 
 if __name__ == "__main__":
     main()
-              
