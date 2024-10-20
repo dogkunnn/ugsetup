@@ -1,0 +1,106 @@
+LinkHook = "https://discord.com/api/webhooks/1294693373038559303/B06YiAu5bRBY0kbSSmtZvk5XJd4A-itA1f2yj38DUi0C5rIG5-Sb_lV8WNBquMxc1bPk" -- webhook to send the moon status
+
+local Moon = {
+    ['8'] = "http://www.roblox.com/asset/?id=9709149431", -- 🌕
+    ['7'] = "http://www.roblox.com/asset/?id=9709149052", -- 🌖
+    ['6'] = "http://www.roblox.com/asset/?id=9709143733", -- 🌗
+    ['5'] = "http://www.roblox.com/asset/?id=9709150401", -- 🌘
+    ['4'] = "http://www.roblox.com/asset/?id=9709135895", -- 🌑
+    ['3'] = "http://www.roblox.com/asset/?id=9709139597", -- 🌒
+    ['2'] = "http://www.roblox.com/asset/?id=9709150086", -- 🌓
+    ['1'] = "http://www.roblox.com/asset/?id=9709149680", -- 🌔
+};
+
+function sendWebhook()
+    local MoonIcon
+    local moonTextureId = game:GetService("Lighting").Sky.MoonTextureId
+
+    for i, v in pairs(Moon) do
+        if moonTextureId == v then
+            MoonIcon = i
+            MoonPercent = i / 8 * 100
+            MoonIcon = '🌕' -- แทนค่าที่จะส่งเป็น moon icon
+            break
+        end
+    end
+
+    local Players = game.Players:GetPlayers() -- ดึงข้อมูลผู้เล่นในเซิร์ฟเวอร์
+    local PlayersMin = #Players -- จำนวนผู้เล่นในเซิร์ฟเวอร์
+
+    -- สร้างรายการชื่อผู้เล่น
+    local PlayerNames = {}
+    for _, player in ipairs(Players) do
+        table.insert(PlayerNames, player.Name)
+    end
+    local PlayerList = table.concat(PlayerNames, ", ") -- รวมชื่อผู้เล่นเข้าด้วยกัน
+
+    MoonMessage = '```'..tostring(MoonPercent..'%'..' : '..MoonIcon)..'```'
+    CodeServer = 'game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,'..'\''..tostring(game.JobId)..'\''..')'
+
+    -- ดึงเวลาปัจจุบันในรูปแบบที่ต้องการจากเซิร์ฟเวอร์
+    local ServerTime = game.Lighting.ClockTime
+    local CurrentTime = string.format("%02d:00", ServerTime) -- แสดงเป็นชั่วโมงในเกม
+
+    local Embed = {
+        ["username"] = "Full Moon Notify",
+        ["avatar_url"] = "https://cdn.discordapp.com/attachments/1258228428881137677/1258228644959096907/1705502093042.jpg?ex=6687483d&is=6685f6bd&hm=31d72cdb691c08bba64e22e59af42a1c4bad11b6ef8bad223436bf883d4e334a&",
+        ["embeds"] = {
+            {
+                ["title"] = "**Full Moon Notify**",
+                ["color"] = tonumber(0),
+                ["type"] = "rich",
+                ["fields"] = {
+                    {
+                        ["name"] = "Players",
+                        ["value"] = '```'..tostring(PlayersMin)..'/12```',
+                        ["inline"] = false
+                    },
+                    {
+                        ["name"] = "Player List",
+                        ["value"] = '```'..PlayerList..'```',
+                        ["inline"] = false
+                    },
+                    {
+                        ["name"] = "Job Id",
+                        ["value"] = '```'..tostring(game.JobId)..'```',
+                        ["inline"] = false
+                    },
+                    {
+                        ["name"] = "Code",
+                        ["value"] = '```'..CodeServer..'```',
+                        ["inline"] = true
+                    },
+                    {
+                        ["name"] = "Moon",
+                        ["value"] = ''..MoonMessage..'',
+                        ["inline"] = true
+                    },
+                    {
+                        ["name"] = "Current Game Time",
+                        ["value"] = '```'..CurrentTime..'```', -- ใช้เวลาในเกม
+                        ["inline"] = false
+                    }
+                },
+                ["thumbnail"] = {
+                    ["url"] = "https://cdn.discordapp.com/attachments/1258228428881137677/1258228644959096907/1705502093042.jpg?ex=6687483d&is=6685f6bd&hm=31d72cdb691c08bba64e22e59af42a1c4bad11b6ef8bad223436bf883d4e334a&",
+                },
+                ["footer"] = {
+                    ["timestamp"] = DateTime.now():ToIsoDate(),
+                    ["icon_url"] = "https://cdn.britannica.com/89/145489-050-4E9609BA/moon-return-journey-Apollo-11-July-21-1969.jpg"
+                }
+            }
+        },
+    }
+
+    local Data = game:GetService("HttpService"):JSONEncode(Embed)
+    local Head = {["content-type"] = "application/json"}
+    Send = http_request or request or HttpPost or syn.request
+    local sendhook = {Url = LinkHook, Body = Data, Method = "POST", Headers = Head}
+    Send(sendhook)
+end
+
+-- ตั้งค่าให้ฟังก์ชันส่ง webhook ทุกๆ 60 วินาที (1 นาที)
+while true do
+    sendWebhook()
+    wait(60)  -- รอ 60 วินาทีก่อนที่จะส่งอีกครั้ง (สามารถเปลี่ยนเลขนี้ได้ตามต้องการ)
+end
