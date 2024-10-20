@@ -10,17 +10,14 @@ def display_menu():
     print("6) ปิดแอพ Roblox")
 
 def edit_file(file_path, new_job_id):
-    # แก้ไขไฟล์ moon.txt
     if os.path.isfile(file_path):
         with open(file_path, 'r') as file:
             content = file.read()
         
-        # แทนที่ newjobid ด้วย new_job_id ใหม่
         print(f"ก่อนการเปลี่ยนใน {file_path}: {content}")
         content = content.replace('newjobid', new_job_id)
         print(f"หลังการเปลี่ยนใน {file_path}: {content}")
         
-        # เขียนเนื้อหากลับไปที่ไฟล์
         with open(file_path, 'w') as file:
             file.write(content)
         print(f"ได้ทำการแก้ไข JobId ใน {file_path} เรียบร้อยแล้ว")
@@ -28,7 +25,6 @@ def edit_file(file_path, new_job_id):
         print(f"ไม่พบไฟล์ {file_path}")
 
 def edit_self(script_path, new_job_id):
-    # แก้ไขตัวเอง (สคริปต์นี้)
     with open(script_path, 'r') as file:
         content = file.read()
     
@@ -36,18 +32,15 @@ def edit_self(script_path, new_job_id):
     content = content.replace('newjobid', new_job_id)
     print(f"หลังการเปลี่ยนใน {script_path}: {content}")
 
-    # เขียนเนื้อหากลับไปที่ไฟล์
     with open(script_path, 'w') as file:
         file.write(content)
     print("ได้ทำการแก้ไข JobId ในสคริปต์นี้เรียบร้อยแล้ว")
 
 def reset_job_id(file_path):
-    # รีเซ็ต JobId กลับเป็น newjobid โดยการแทนที่ค่าปัจจุบันเท่านั้น
     if os.path.isfile(file_path):
         with open(file_path, 'r') as file:
             content = file.readlines()
         
-        # หาบรรทัดที่มีค่า targetJobId แล้วแทนที่เฉพาะค่า JobId ด้วย newjobid
         new_content = []
         for line in content:
             if "local targetJobId =" in line:
@@ -56,7 +49,6 @@ def reset_job_id(file_path):
                 print(f"บรรทัดหลังการรีเซ็ต: {line.strip()}")
             new_content.append(line)
 
-        # เขียนเนื้อหาที่แก้ไขแล้วกลับไปที่ไฟล์
         with open(file_path, 'w') as file:
             file.writelines(new_content)
         print(f"ได้ทำการรีเซ็ต JobId ใน {file_path} เรียบร้อยแล้ว")
@@ -64,20 +56,35 @@ def reset_job_id(file_path):
         print(f"ไม่พบไฟล์ {file_path}")
 
 def close_roblox():
-    # ปิดแอพ Roblox
-    os.system("am force-stop com.roblox.client")  # ใช้ชื่อ package ของ Roblox
+    # รายชื่อแอพที่จะปิด
+    app_packages = [
+        f"com.roblox.clien{char}" for char in "abcdefghijklmnopqrstuvwxyz0123456789"
+    ] + [
+        "com.roblox.client"  # รวมแอพที่มีชื่อเดียวกัน
+    ]
+
+    # ปิดแอพทุกตัวในรายการ
+    for package in app_packages:
+        os.system(f"am force-stop {package}")
+
+    # เช็คว่าแอพถูกปิดแล้ว
+    for package in app_packages:
+        result = os.popen(f"adb shell pidof {package}").read().strip()
+        if result:
+            print(f"{package} ยังทำงานอยู่")
+        else:
+            print(f"{package} ถูกปิดแล้ว")
 
 def main():
     file_path = '/storage/emulated/0/Delta/AUTOexecute/moon.txt'
-    script_path = os.path.realpath(__file__)  # รับเส้นทางของสคริปต์ปัจจุบัน
+    script_path = os.path.realpath(__file__)
 
     while True:
         display_menu()
         choice = input("เลือกตัวเลือก (1/2/3/4/5/6): ")
 
         if choice == '1':
-            os.system(os.system('su -c "cd /sdcard/download && export PATH=\$PATH:/data/data/com.termux/files/usr/bin && export TERM=xterm-256color && python ./rejoin.py"')
-)  # รัน Python สคริปต์
+            os.system('su -c "cd /sdcard/download && export PATH=$PATH:/data/data/com.termux/files/usr/bin && export TERM=xterm-256color && python3 ./rejoin.py"')  # รัน Python สคริปต์
         elif choice == '2':
             os.system("ls -l")  # แสดงไฟล์ในโฟลเดอร์ปัจจุบัน
         elif choice == '3':
@@ -93,7 +100,7 @@ def main():
         elif choice == '6':
             close_roblox()  # ปิดแอพ Roblox
         else:
-            print("ตัวเลือกไม่ถูกต้อง โปรดลองอีกครั้ง.")  # เพิ่มการจัดการในกรณีตัวเลือกผิด
+            print("ตัวเลือกไม่ถูกต้อง โปรดลองอีกครั้ง.")
 
 if __name__ == "__main__":
     main()
