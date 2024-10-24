@@ -2,7 +2,7 @@ import os
 
 def replace_menu_code(new_code):
     # เส้นทางไปยังไฟล์ menu.py
-    menu_path = '/path/to/menu.py'  # เปลี่ยนเส้นทางนี้ให้ถูกต้อง
+    menu_path = '/storage/emulated/0/Download/menu.py'  # เปลี่ยนเส้นทางนี้ให้ถูกต้อง
 
     # ลบโค้ดเดิมและแทนที่ด้วยโค้ดใหม่
     with open(menu_path, 'w') as file:
@@ -10,7 +10,7 @@ def replace_menu_code(new_code):
     print(f"ได้ทำการแทนที่โค้ดใน {menu_path} เรียบร้อยแล้ว")
 
 def run_menu_script():
-    menu_path = '/path/to/menu.py'  # เปลี่ยนเส้นทางนี้ให้ถูกต้อง
+    menu_path = '/storage/emulated/0/Download/menu.py'  # เปลี่ยนเส้นทางนี้ให้ถูกต้อง
 
     # รันไฟล์ menu.py
     if os.path.isfile(menu_path):
@@ -140,3 +140,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
