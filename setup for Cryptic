@@ -90,7 +90,7 @@ def close_roblox():
             print(f"{package} ถูกปิดแล้ว")
 
 def main():
-    file_path = '/storage/emulated/0/Cryptic/ Autoexecute/moon.txt'
+    file_path = '/storage/emulated/0/Cryptic/Autoexecute/moon.txt'
     script_path = os.path.realpath(__file__)
 
     while True:
