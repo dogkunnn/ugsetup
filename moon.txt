@@ -1,20 +1,23 @@
--- กำหนด JobId ของเซิร์ฟเวอร์ที่ต้องการ
-local targetPlaceId = 7449423635  -- placeId ของเซิร์ฟเวอร์
-local targetJobId = "9cffc040-8fa1-4018-9f66-d4f20080449e"  -- JobId ของเซิร์ฟเวอร์ที่ต้องการ hop ไป
+local targetPlaceId = 7449423635
+local targetJobId = "9cffc040-8fa1-4018-9f66-d4f20080449e"
 local player = game:GetService("Players").LocalPlayer
-
--- ฟังก์ชัน Teleport ไปยังเซิร์ฟเวอร์เป้าหมาย
 function teleportToTargetServer()
-    -- ตรวจสอบว่าเราอยู่ในเซิร์ฟเวอร์ที่ถูกต้องหรือยัง
-    if game.JobId ~= targetJobId then
+     if game.JobId ~= targetJobId then
         print("Not in target server. Teleporting...")
-        -- ย้ายผู้เล่นไปยังเซิร์ฟเวอร์ที่ต้องการ
         game:GetService("TeleportService"):TeleportToPlaceInstance(targetPlaceId, targetJobId, player)
     else
         print("Already in target server. Stopping teleport.")
-        -- หากอยู่ในเซิร์ฟเวอร์ที่ต้องการแล้ว หยุดการ teleport
+        return true 
+    end
+    return false  
+end
+local function startTeleportLoop()
+    while true do
+        local success = teleportToTargetServer()
+        if success then
+            break 
+        end
+        task.wait(4)  
     end
 end
-
--- เรียกใช้ฟังก์ชันเพื่อ teleport
-teleportToTargetServer()
+startTeleportLoop()
