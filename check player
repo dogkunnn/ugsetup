@@ -1,0 +1,33 @@
+-- สร้าง UI
+local ScreenGui = Instance.new("ScreenGui")
+local TextLabel = Instance.new("TextLabel")
+
+-- ตั้งค่า ScreenGui
+ScreenGui.Name = "PlayerCountUI"
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
+
+-- ตั้งค่า TextLabel
+TextLabel.Name = "PlayerCountLabel"
+TextLabel.Parent = ScreenGui
+TextLabel.BackgroundTransparency = 1 -- ทำให้โปร่งใส
+TextLabel.Position = UDim2.new(0.01, 0, 0.01, 0) -- ตำแหน่งมุมบนซ้าย
+TextLabel.Size = UDim2.new(0.15, 0, 0.05, 0) -- ขนาดข้อความเล็กลง
+TextLabel.Font = Enum.Font.GothamBold -- ใช้ฟอนต์ที่ชัดเจน
+TextLabel.Text = "0 Players" -- ค่าเริ่มต้น
+TextLabel.TextColor3 = Color3.new(1, 1, 1) -- สีขาว
+TextLabel.TextScaled = true -- ปรับขนาดข้อความให้อัตโนมัติ
+TextLabel.TextXAlignment = Enum.TextXAlignment.Left -- จัดข้อความชิดซ้าย
+
+-- ฟังก์ชันสำหรับอัปเดตจำนวนผู้เล่น
+local function updatePlayerCount()
+    local players = game.Players:GetPlayers()
+    TextLabel.Text = #players .. " Players" -- เน้นจำนวนผู้เล่น
+end
+
+-- อัปเดตจำนวนผู้เล่นเมื่อมีการเปลี่ยนแปลง
+game.Players.PlayerAdded:Connect(updatePlayerCount)
+game.Players.PlayerRemoving:Connect(updatePlayerCount)
+
+-- อัปเดตจำนวนผู้เล่นครั้งแรก
+updatePlayerCount()
