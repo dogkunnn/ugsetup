@@ -1,23 +1,37 @@
 local targetPlaceId = 7449423635
-local targetJobId = "9cffc040-8fa1-4018-9f66-d4f20080449e"
+local targetJobId = "05dc78b8-5172-4051-9413-f7ff059ff8d6"
 local player = game:GetService("Players").LocalPlayer
-function teleportToTargetServer()
-     if game.JobId ~= targetJobId then
-        print("Not in target server. Teleporting...")
-        game:GetService("TeleportService"):TeleportToPlaceInstance(targetPlaceId, targetJobId, player)
+local teleportService = game:GetService("TeleportService")
+local isTeleporting = false
+
+local function checkCurrentServer()
+    if game.JobId == targetJobId then
+        print("Already in the target server. Stopping script.")
+        return true
     else
-        print("Already in target server. Stopping teleport.")
-        return true 
+        print("Not in the target server. Preparing to teleport...")
+        return false
     end
-    return false  
 end
-local function startTeleportLoop()
-    while true do
-        local success = teleportToTargetServer()
-        if success then
-            break 
+
+local function teleportToTargetServer()
+    if not isTeleporting then
+        isTeleporting = true
+        local success, errorMessage = pcall(function()
+            teleportService:TeleportToPlaceInstance(targetPlaceId, targetJobId, player)
+        end)
+        if not success then
+            print("Teleport failed: " .. errorMessage)
+            isTeleporting = false
         end
-        task.wait(4)  
     end
 end
-startTeleportLoop()
+
+local function startTeleportProcess()
+    if not checkCurrentServer() then
+        task.wait(2) -- รอ 2 วินาทีก่อนเทเลพอร์ต
+        teleportToTargetServer()
+    end
+end
+
+startTeleportProcess()
