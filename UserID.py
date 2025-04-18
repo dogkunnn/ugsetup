@@ -49,7 +49,12 @@ def get_user_data_from_apps(base_path):
         "com.two.two",
         "com.three.three",
         "com.four.four",
-        "com.five.five"
+        "com.five.five",
+        "com.six.six",
+        "com.seven.seven",
+        "com.eight.eight",
+        "com.nine.nine",
+        "com.ten.ten"
     ]  # รายชื่อแพคเกจที่ต้องการตรวจสอบ
 
     print("\n🚀 **เริ่มต้นกระบวนการดึงข้อมูล...**\n")
