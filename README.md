@@ -3,7 +3,7 @@
 su -c "cd /storage/emulated/0/Download && export PATH=$PATH:/data/data/com.termux/files/usr/bin && export TERM=xterm-256color && python UserID.py"
 ```
 ### Termux boot
-#setup
+# setup
 ```js
 mkdir -p ~/.termux/boot
 echo '#!/bin/bash
@@ -12,7 +12,7 @@ su -c "export PATH=\$PATH:/data/data/com.termux/files/usr/bin && export TERM=xte
 180
 EOF' > ~/.termux/boot/abcd.sh
 ```
-#delete 
+# delete 
 ```js
 rm ~/.termux/boot/abcd.sh
 ```
